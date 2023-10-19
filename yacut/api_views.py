@@ -1,10 +1,12 @@
+from http import HTTPStatus
+
 from flask import jsonify, request
 
 from settings import (ERROR_SHORT, MAX_ORIGINAL_SHORT_LENGTH, NO_BODY_REQUEST,
                       SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
                       URL_IS_REQUIRED)
 from yacut import app
-from yacut.error_handlers import (CustomAPIException, ErrorOriginalValidation,
+from yacut.error_handlers import (InvalidAPIException, ErrorOriginalValidation,
                                   ErrorShortValidation, ShortAnFound,
                                   ShortAnUnique)
 from yacut.models import URLMap
@@ -15,11 +17,11 @@ def add_short_url():
     """Создание короткой ссылки."""
     data = request.get_json()
     if not data:
-        raise CustomAPIException(
+        raise InvalidAPIException(
             NO_BODY_REQUEST
         )
     if 'url' not in data:
-        raise CustomAPIException(
+        raise InvalidAPIException(
             URL_IS_REQUIRED
         )
     short = data.get('custom_id')
@@ -32,17 +34,17 @@ def add_short_url():
             ).to_dict()
         ), 201
     except ErrorOriginalValidation:
-        raise CustomAPIException(
+        raise InvalidAPIException(
             SHORT_IS_LONG.format(
                 length=MAX_ORIGINAL_SHORT_LENGTH
             )
         )
     except ErrorShortValidation:
-        raise CustomAPIException(
+        raise InvalidAPIException(
             ERROR_SHORT
         )
     except ShortAnUnique:
-        raise CustomAPIException(
+        raise InvalidAPIException(
             SHORT_NOT_UNIQUE.format(
                 short=short
             )
@@ -55,8 +57,8 @@ def get_original_url(short):
     try:
         return jsonify(
             {'url': URLMap.get_original_url(short)}
-        ), 200
+        ), HTTPStatus.OK
     except ShortAnFound:
-        raise CustomAPIException(
-            SHORT_NOT_FOUND, 404
+        raise InvalidAPIException(
+            SHORT_NOT_FOUND, HTTPStatus.NOT_FOUND
         )

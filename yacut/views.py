@@ -1,8 +1,9 @@
-from flask import redirect, render_template
-
+from flask import abort, redirect, render_template
+from http import HTTPStatus
 from yacut import app
 from yacut.forms import URLForm
 from yacut.models import URLMap
+from yacut.error_handlers import ShortAnFound
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -29,6 +30,10 @@ def index_view():
 @app.route('/<string:short>', methods=['GET'])
 def short_url_view(short):
     """Переадресация."""
-    return redirect(
-        URLMap.query.filter_by(short=short).first_or_404().original
-    )
+    try:
+        return redirect(
+            URLMap.get_original_url(short),
+            code=HTTPStatus.FOUND
+        )
+    except ShortAnFound:
+        abort(404)

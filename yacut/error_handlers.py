@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from flask import jsonify, render_template
 
 from yacut import app, db
@@ -23,8 +25,13 @@ class ShortAnFound(Exception):
     pass
 
 
-class CustomAPIException(Exception):
-    status_code = 400
+class FailedAutoGeneration(Exception):
+    """Ошибка автоматической генерации короткой ссылки"""
+    pass
+
+
+class InvalidAPIException(Exception):
+    status_code = HTTPStatus.BAD_REQUEST
 
     def __init__(self, message, status_code=None):
         super().__init__()
@@ -36,7 +43,7 @@ class CustomAPIException(Exception):
         return dict(message=self.message)
 
 
-@app.errorhandler(CustomAPIException)
+@app.errorhandler(InvalidAPIException)
 def invalid_api_usage(error):
     return jsonify(error.to_dict()), error.status_code
 

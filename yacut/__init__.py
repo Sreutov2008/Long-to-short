@@ -10,5 +10,5 @@ db = SQLAlchemy(app)
 
 from . import api_views, error_handlers, views
 
-#with app.app_context():
-#    db.create_all()
+with app.app_context():
+    db.create_all()
