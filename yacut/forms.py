@@ -1,12 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, URLField
-from wtforms.validators import (InputRequired, Length, Optional, Regexp,
-                                ValidationError)
+from wtforms.validators import (
+    InputRequired, Length, Optional, Regexp, ValidationError
+)
 
-from settings import (CUSTOM_URL_COMMENT, ERROR_SHORT,
-                      MAX_ORIGINAL_SHORT_LENGTH, MAX_SHORT_LENGTH,
-                      ORIGINAL_URL_COMMENT, SHORT_NOT_UNIQUE, SHORT_PATTERN,
-                      SUBMIT_COMMENT, URL_IS_REQUIRED)
+from settings import (
+    CUSTOM_URL_COMMENT, ERROR_SHORT,
+    MAX_ORIGINAL_LINK_LENGTH, MAX_SHORT_LENGTH,
+    ORIGINAL_URL_COMMENT, SHORT_NOT_UNIQUE, SHORT_PATTERN,
+    SUBMIT_COMMENT, URL_IS_REQUIRED
+)
 from yacut.models import URLMap
 
 
@@ -15,7 +18,7 @@ class URLForm(FlaskForm):
         ORIGINAL_URL_COMMENT,
         validators=[
             Length(
-                max=MAX_ORIGINAL_SHORT_LENGTH
+                max=MAX_ORIGINAL_LINK_LENGTH
             ),
             InputRequired(
                 message=URL_IS_REQUIRED

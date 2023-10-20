@@ -28,7 +28,7 @@ def index_view():
 
 
 @app.route('/<string:short>', methods=['GET'])
-def short_url_view(short):
+def redirect_to_original_url(short):
     """Переадресация."""
     try:
         return redirect(
@@ -36,4 +36,4 @@ def short_url_view(short):
             code=HTTPStatus.FOUND
         )
     except ShortAnFound:
-        abort(404)
+        abort(HTTPStatus.NOT_FOUND)

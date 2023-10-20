@@ -4,19 +4,24 @@ from datetime import datetime
 
 from flask import url_for
 
-from settings import (AUTO_SHORT_LENGTH, CHARACTERS, ERROR_SHORT,
-                      MAX_ORIGINAL_SHORT_LENGTH, MAX_SHORT_LENGTH,
-                      SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
-                      SHORT_PATTERN, SHORT_URL_VIEW, MAX_AUTO_ATTEMPT, FAILED_AUTO_GENERATION)
+from settings import (
+    AUTO_SHORT_LENGTH, CHARACTERS, ERROR_SHORT,
+    MAX_ORIGINAL_LINK_LENGTH, MAX_SHORT_LENGTH,
+    SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
+    SHORT_PATTERN, REDIRECT_TO_ORIGINAL_URL_VIEW,
+    MAX_AUTO_ATTEMPT, FAILED_AUTO_GENERATION
+)
 from yacut import db
-from yacut.error_handlers import (ErrorOriginalValidation,
-                                  ErrorShortValidation, ShortAnFound,
-                                  ShortAnUnique, FailedAutoGeneration)
+from yacut.error_handlers import (
+    ErrorOriginalValidation,
+    ErrorShortValidation, ShortAnFound,
+    ShortAnUnique, FailedAutoGeneration
+)
 
 
 class URLMap(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    original = db.Column(db.String(MAX_ORIGINAL_SHORT_LENGTH), nullable=False)
+    original = db.Column(db.String(MAX_ORIGINAL_LINK_LENGTH), nullable=False)
     short = db.Column(db.String(MAX_SHORT_LENGTH), unique=True, nullable=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
@@ -28,7 +33,7 @@ class URLMap(db.Model):
 
     def get_absolute_short_url(self):
         return url_for(
-            SHORT_URL_VIEW,
+            REDIRECT_TO_ORIGINAL_URL_VIEW,
             short=self.short,
             _external=True
         )
@@ -48,10 +53,10 @@ class URLMap(db.Model):
 
     @staticmethod
     def create(original, short, validation_required):
-        if validation_required and len(original) > MAX_ORIGINAL_SHORT_LENGTH:
+        if validation_required and len(original) > MAX_ORIGINAL_LINK_LENGTH:
             raise ErrorOriginalValidation(
                 SHORT_IS_LONG.format(
-                    length=MAX_ORIGINAL_SHORT_LENGTH
+                    length=MAX_ORIGINAL_LINK_LENGTH
                 )
             )
         if short == '' or short is None:

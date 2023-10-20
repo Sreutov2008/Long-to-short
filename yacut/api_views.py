@@ -2,13 +2,17 @@ from http import HTTPStatus
 
 from flask import jsonify, request
 
-from settings import (ERROR_SHORT, MAX_ORIGINAL_SHORT_LENGTH, NO_BODY_REQUEST,
-                      SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
-                      URL_IS_REQUIRED)
+from settings import (
+    ERROR_SHORT, MAX_ORIGINAL_LINK_LENGTH, NO_BODY_REQUEST,
+    SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
+    URL_IS_REQUIRED
+)
 from yacut import app
-from yacut.error_handlers import (InvalidAPIException, ErrorOriginalValidation,
-                                  ErrorShortValidation, ShortAnFound,
-                                  ShortAnUnique)
+from yacut.error_handlers import (
+    InvalidAPIException, ErrorOriginalValidation,
+    ErrorShortValidation, ShortAnFound,
+    ShortAnUnique
+)
 from yacut.models import URLMap
 
 
@@ -36,7 +40,7 @@ def add_short_url():
     except ErrorOriginalValidation:
         raise InvalidAPIException(
             SHORT_IS_LONG.format(
-                length=MAX_ORIGINAL_SHORT_LENGTH
+                length=MAX_ORIGINAL_LINK_LENGTH
             )
         )
     except ErrorShortValidation:
