@@ -65,6 +65,11 @@ pip install -r requirements.txt
 ```
 touch .env
 ```
+Выполните миграции:
+```
+flask db upgrade
+```
+
 Запуск проекта:
 
 ```
