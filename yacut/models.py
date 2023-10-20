@@ -7,7 +7,7 @@ from flask import url_for
 from settings import (AUTO_SHORT_LENGTH, CHARACTERS, ERROR_SHORT,
                       MAX_ORIGINAL_SHORT_LENGTH, MAX_SHORT_LENGTH,
                       SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
-                      SHORT_PATTERN, SHORT_URL_VIEW, MAX_AUTO_ATTEMPT,FAILED_AUTO_GENERATION)
+                      SHORT_PATTERN, SHORT_URL_VIEW, MAX_AUTO_ATTEMPT, FAILED_AUTO_GENERATION)
 from yacut import db
 from yacut.error_handlers import (ErrorOriginalValidation,
                                   ErrorShortValidation, ShortAnFound,
