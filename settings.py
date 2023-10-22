@@ -19,6 +19,10 @@ SHORT_IS_LONG = (
     'Размер короткой ссылки превышен. '
     f'Максимум {MAX_SHORT_LENGTH} символов.'
 )
+ORIGINAL_LINK_IS_LONG = (
+    'Размер короткой ссылки превышен. '
+    f'Максимум {MAX_ORIGINAL_LINK_LENGTH} символов.'
+)
 SHORT_NOT_FOUND = 'Указанный id не найден'
 ORIGINAL_URL_COMMENT = 'Добавьте исходную ссылку'
 CUSTOM_URL_COMMENT = 'Добавьте свой вариант короткой ссылки'

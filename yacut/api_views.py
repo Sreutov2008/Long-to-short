@@ -3,9 +3,8 @@ from http import HTTPStatus
 from flask import jsonify, request
 
 from settings import (
-    ERROR_SHORT, MAX_ORIGINAL_LINK_LENGTH, NO_BODY_REQUEST,
-    SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
-    URL_IS_REQUIRED
+    NO_BODY_REQUEST, SHORT_IS_LONG, SHORT_NOT_FOUND,
+    SHORT_NOT_UNIQUE, URL_IS_REQUIRED
 )
 from yacut import app
 from yacut.error_handlers import (
@@ -14,6 +13,9 @@ from yacut.error_handlers import (
     ShortAnUnique
 )
 from yacut.models import URLMap
+
+
+ERROR_SHORT_VALIDATION = 'Указано недопустимое имя для короткой ссылки'
 
 
 @app.route('/api/id/', methods=['POST'])
@@ -36,22 +38,18 @@ def add_short_url():
                 short=short,
                 validation_required=True,
             ).to_dict()
-        ), 201
+        ), HTTPStatus.CREATED
     except ErrorOriginalValidation:
         raise InvalidAPIException(
-            SHORT_IS_LONG.format(
-                length=MAX_ORIGINAL_LINK_LENGTH
-            )
+            SHORT_IS_LONG
         )
     except ErrorShortValidation:
         raise InvalidAPIException(
-            ERROR_SHORT
+            ERROR_SHORT_VALIDATION
         )
     except ShortAnUnique:
         raise InvalidAPIException(
-            SHORT_NOT_UNIQUE.format(
-                short=short
-            )
+            SHORT_NOT_UNIQUE
         )
 
 

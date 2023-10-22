@@ -9,7 +9,7 @@ from settings import (
     MAX_ORIGINAL_LINK_LENGTH, MAX_SHORT_LENGTH,
     SHORT_IS_LONG, SHORT_NOT_FOUND, SHORT_NOT_UNIQUE,
     SHORT_PATTERN, REDIRECT_TO_ORIGINAL_URL_VIEW,
-    MAX_AUTO_ATTEMPT, FAILED_AUTO_GENERATION
+    MAX_AUTO_ATTEMPT, FAILED_AUTO_GENERATION, ORIGINAL_LINK_IS_LONG
 )
 from yacut import db
 from yacut.error_handlers import (
@@ -55,9 +55,7 @@ class URLMap(db.Model):
     def create(original, short, validation_required):
         if validation_required and len(original) > MAX_ORIGINAL_LINK_LENGTH:
             raise ErrorOriginalValidation(
-                SHORT_IS_LONG.format(
-                    length=MAX_ORIGINAL_LINK_LENGTH
-                )
+                ORIGINAL_LINK_IS_LONG
             )
         if short == '' or short is None:
             short = URLMap.get_unique_short()
